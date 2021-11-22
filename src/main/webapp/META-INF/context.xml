@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-    <Resource name="jdbc/cbook" auth="Container" type="javax.sql.DataSource"
+    //  name should be similar to the value of web.xml res-ref-name attribute
+    <Resource name="jdbc/contact" auth="Container" type="javax.sql.DataSource"
               maxTotal="5" maxIdle="2" maxWaitMillis=""
               username="root" password="7251mMm7251" driverClassName="com.mysql.jdbc.Driver"
               url="jdbc:mysql://localhost:3306/cbook"/>
