@@ -4,6 +4,8 @@ import lk.ijse.dep7.contactbookbackend.dto.ContactDTO;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactService {
     private Connection connection;
@@ -32,5 +34,35 @@ public class ContactService {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<ContactDTO> findContact(String query) {
+
+        List<ContactDTO> contacts = new ArrayList<>();
+
+        try {
+            PreparedStatement stm = connection.prepareStatement("SELECT * FROM contact WHERE id LIKE ? OR fname LIKE ? OR lname LIKE ? OR phone LIKE ? OR email LIKE ? OR address LIKE ?;");
+            ResultSet rst = stm.executeQuery();
+
+            while (rst.next()) {
+                Blob picture = rst.getBlob("picture");
+                byte[] bytes = picture.getBytes(1, (int) picture.length());
+
+                contacts.add(new ContactDTO(
+                        String.format("CID%03d", rst.getString("id")),
+                        rst.getString("fname"),
+                        rst.getString("lname"),
+                        rst.getString("phone"),
+                        rst.getString("email"),
+                        rst.getString("address"),
+                        bytes
+                ));
+            }
+
+            return contacts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
