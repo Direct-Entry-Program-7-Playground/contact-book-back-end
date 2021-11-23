@@ -15,6 +15,15 @@ public class ContactDTO implements Serializable {
     public ContactDTO() {
     }
 
+    public ContactDTO(String fName, String lName, String phone, String email, String address, String picture) {
+        this.fName = fName;
+        this.lName = lName;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.picture = picture;
+    }
+
     public ContactDTO(String id, String fName, String lName, String phone, String email, String address, String picture) {
         this.id = id;
         this.fName = fName;
