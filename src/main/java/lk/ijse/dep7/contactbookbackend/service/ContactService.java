@@ -2,6 +2,7 @@ package lk.ijse.dep7.contactbookbackend.service;
 
 import lk.ijse.dep7.contactbookbackend.dto.ContactDTO;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.sql.*;
 
 public class ContactService {
@@ -20,7 +21,7 @@ public class ContactService {
             stm.setString(3, contact.getPhone());
             stm.setString(4, contact.getEmail());
             stm.setString(5, contact.getAddress());
-            stm.setString(6, contact.getPicture());
+            stm.setBlob(6, new SerialBlob(contact.getPicture()));
 
             if (stm.executeUpdate() == 1) {
                 ResultSet keys = stm.getGeneratedKeys();

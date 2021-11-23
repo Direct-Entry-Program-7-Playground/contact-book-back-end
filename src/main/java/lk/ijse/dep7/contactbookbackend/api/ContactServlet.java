@@ -45,11 +45,10 @@ public class ContactServlet extends HttpServlet {
             String email = request.getParameter("email");
             String address = request.getParameter("address");
             Part cimage = request.getPart("cimage");
-
             InputStream is = cimage.getInputStream();
             byte[] picture = new byte[is.available()];
             is.read(picture);
-            ContactDTO contact = new ContactDTO(fname, lname, phone, email, address, new String(picture));
+            ContactDTO contact = new ContactDTO(fname, lname, phone, email, address, picture);
 
             System.out.println(contactService.saveContact(contact));;
         } catch (SQLException exception) {

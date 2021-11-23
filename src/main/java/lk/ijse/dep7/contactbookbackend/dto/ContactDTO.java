@@ -10,12 +10,12 @@ public class ContactDTO implements Serializable {
     private String phone;
     private String email;
     private String address;
-    private String picture;
+    private byte[] picture;
 
     public ContactDTO() {
     }
 
-    public ContactDTO(String fName, String lName, String phone, String email, String address, String picture) {
+    public ContactDTO(String fName, String lName, String phone, String email, String address, byte[] picture) {
         this.fName = fName;
         this.lName = lName;
         this.phone = phone;
@@ -24,7 +24,7 @@ public class ContactDTO implements Serializable {
         this.picture = picture;
     }
 
-    public ContactDTO(String id, String fName, String lName, String phone, String email, String address, String picture) {
+    public ContactDTO(String id, String fName, String lName, String phone, String email, String address, byte[] picture) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;
@@ -82,11 +82,11 @@ public class ContactDTO implements Serializable {
         this.address = address;
     }
 
-    public String getPicture() {
+    public byte[] getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(byte[] picture) {
         this.picture = picture;
     }
 

@@ -8,9 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,7 +28,7 @@ class ContactServiceTest {
 
     @AfterEach
     void tearDown() throws SQLException {
-        connection.rollback();
+//        connection.rollback();
         connection.setAutoCommit(true);
         connection.close();
     }
@@ -38,8 +36,19 @@ class ContactServiceTest {
     @Test
     void saveContact() throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get("/home/manoj/Documents/MRR/IJSE/DEP/Phase - 2/Day_89 (2021-10-11)/contact-book-front-end/asset/img/bee.jpeg"));
-        String s = contactService.saveContact(new ContactDTO("Dulaj", "Fernando", "071-456-1258", "dulaj@email.com", "Kurunegala", new String(bytes)));
+        String s = contactService.saveContact(new ContactDTO("Dulaj", "Fernando", "071-456-1258", "dulaj@email.com", "Kurunegala", bytes));
         assertTrue(s.matches("CID\\d{3,}"));
+    }
+
+    @Test
+    void readContact() throws SQLException, IOException {
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM contact WHERE id=15");
+        ResultSet rst = stm.executeQuery();
+        rst.next();
+        Blob picture = rst.getBlob("picture");
+        byte[] bytes = picture.getBytes(1, (int) picture.length());
+        Files.write(Paths.get("/home/manoj/Documents/MRR/IJSE/DEP/Phase - 2/Day_89 (2021-10-11)/contact-book-back-end/src/main/uploaded/img/bee.jpeg"),bytes);
+
     }
 
 }
