@@ -39,9 +39,18 @@ public class ContactService {
     public List<ContactDTO> findContact(String query) {
 
         List<ContactDTO> contacts = new ArrayList<>();
+        query = "%" + query + "%";
 
         try {
             PreparedStatement stm = connection.prepareStatement("SELECT * FROM contact WHERE id LIKE ? OR fname LIKE ? OR lname LIKE ? OR phone LIKE ? OR email LIKE ? OR address LIKE ?;");
+
+            stm.setString(1,query);
+            stm.setString(2,query);
+            stm.setString(3,query);
+            stm.setString(4,query);
+            stm.setString(5,query);
+            stm.setString(6,query);
+
             ResultSet rst = stm.executeQuery();
 
             while (rst.next()) {
@@ -49,7 +58,7 @@ public class ContactService {
                 byte[] bytes = picture.getBytes(1, (int) picture.length());
 
                 contacts.add(new ContactDTO(
-                        String.format("CID%03d", rst.getString("id")),
+                        String.format("CID%03d", rst.getInt("id")),
                         rst.getString("fname"),
                         rst.getString("lname"),
                         rst.getString("phone"),
