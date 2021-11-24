@@ -1,9 +1,11 @@
 package lk.ijse.dep7.contactbookbackend.dto;
 
+import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.json.bind.annotation.JsonbPropertyOrder;
 import jakarta.json.bind.annotation.JsonbTransient;
 
 import java.io.Serializable;
+import java.util.Base64;
 
 @JsonbPropertyOrder({"id", "fName", "lName", "phone", "email", "address"})
 public class ContactDTO implements Serializable {
@@ -92,6 +94,22 @@ public class ContactDTO implements Serializable {
 
     public void setPicture(byte[] picture) {
         this.picture = picture;
+    }
+
+    @JsonbProperty("picture")
+    public String getPictureAsDataURl() {
+//        data:[<mediatype>][;base64],<data>
+        if (picture != null) {
+
+            String base64EncorderedPicture = Base64.getEncoder().encodeToString(picture);
+            StringBuilder sb = new StringBuilder();
+            sb.append("data:");
+            sb.append("image/*");
+            sb.append(";base64");
+            sb.append(base64EncorderedPicture);
+            return sb.toString();
+        }
+        return null;
     }
 
     @Override
