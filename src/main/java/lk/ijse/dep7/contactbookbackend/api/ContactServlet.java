@@ -125,8 +125,8 @@ public class ContactServlet extends HttpServlet {
             String contactId = contactService.saveContact(contact);
             System.out.println(contactId);
             response.setContentType("application/json");
-            PrintWriter out = response.getWriter();
-            out.println(contactId);
+            response.getWriter().println(JsonbBuilder.create().toJson(contactId));
+
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
