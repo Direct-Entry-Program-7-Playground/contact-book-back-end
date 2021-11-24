@@ -8,14 +8,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import lk.ijse.dep7.contactbookbackend.dto.ContactDTO;
-import lk.ijse.dep7.contactbookbackend.service.ContactService;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 @MultipartConfig(
         location = "/home/manoj/Documents/MRR/IJSE/DEP/Phase - 2/Day_89 (2021-10-11)/contact-book-back-end/src/main/uploaded/img/",
@@ -33,27 +29,66 @@ public class ContactServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("doPost");
 
+        if (request.getContentType() == null || !request.getContentType().startsWith("multipart/form-data")) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
+            return;
+        }
 
-        try (Connection connection = dataSource.getConnection()) {
+        String errMsg = null;
+
+        String fname = request.getParameter("fname");
+        String lname = request.getParameter("lname");
+        String phone = request.getParameter("phone");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
+        Part cimage = request.getPart("cimage");
+
+        if (fname == null) {
+            errMsg = "First name can't be empty";
+        } else if (!fname.trim().matches("^[A-Za-z]{3,}")) {
+            errMsg = "Invalid name";
+        } else if (phone == null && email == null) {
+            errMsg = "Phone and email both are empty, please add at least one contact detail";
+        } else if (phone != null && !phone.trim().matches("^[\\d]{3,10}")) {
+            errMsg = "Invalid phone number";
+        } else if (email != null && !email.trim().matches("^[A-Za-z\\d]{3,}@[A-Za-z\\d]{3,}(.[A-Za-z]{2,})+")) {
+            errMsg = "Invalid email address";
+        } else if (address != null && !(address.trim().length() >= 3)) {
+            errMsg = "Invalid address";
+        } else {
+            pic:
+            if (cimage != null) {
+                if (!cimage.getContentType().startsWith("image")) {
+                    errMsg = "Invalid contact image";
+                    break pic;
+                } else {
+                    try {
+                        InputStream is = cimage.getInputStream();
+                        byte[] picture = new byte[is.available()];
+                        is.read(picture);
+                    } catch (Exception e) {
+                        errMsg = "Failed to read the contact image";
+                    }
+                }
+            }
+        }
+
+        if (errMsg != null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, errMsg);
+            return;
+        }
+
+       /* try (Connection connection = dataSource.getConnection()) {
             ContactService contactService = new ContactService(connection);
 
-            String fname = request.getParameter("fname");
-            String lname = request.getParameter("lname");
-            String phone = request.getParameter("phone");
-            String email = request.getParameter("email");
-            String address = request.getParameter("address");
-            Part cimage = request.getPart("cimage");
-            InputStream is = cimage.getInputStream();
-            byte[] picture = new byte[is.available()];
-            is.read(picture);
             ContactDTO contact = new ContactDTO(fname, lname, phone, email, address, picture);
 
-            System.out.println(contactService.saveContact(contact));;
+            System.out.println(contactService.saveContact(contact));
+            ;
         } catch (SQLException exception) {
             exception.printStackTrace();
-        }
+        }*/
 
 
     }
