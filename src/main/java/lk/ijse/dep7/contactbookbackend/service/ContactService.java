@@ -55,7 +55,11 @@ public class ContactService {
 
             while (rst.next()) {
                 Blob picture = rst.getBlob("picture");
-                byte[] bytes = picture.getBytes(1, (int) picture.length());
+                byte[] bytes = null;
+
+                if (picture != null) {
+                    bytes = picture.getBytes(1, (int) picture.length());
+                }
 
                 contacts.add(new ContactDTO(
                         String.format("CID%03d", rst.getInt("id")),

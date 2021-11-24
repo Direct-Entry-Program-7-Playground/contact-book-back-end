@@ -39,5 +39,9 @@
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.27" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.11.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.annotation:jakarta.annotation-api:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse:yasson:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.json.bind:jakarta.json.bind-api:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.json:jakarta.json-api:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.glassfish:jakarta.json:module:2.0.0" level="project" />
   </component>
 </module>

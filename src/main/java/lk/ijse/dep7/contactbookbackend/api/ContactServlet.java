@@ -1,6 +1,8 @@
 package lk.ijse.dep7.contactbookbackend.api;
 
 import jakarta.annotation.Resource;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,6 +19,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 @MultipartConfig(
         location = "/home/manoj/Documents/MRR/IJSE/DEP/Phase - 2/Day_89 (2021-10-11)/contact-book-back-end/src/main/uploaded/img/",
@@ -29,6 +32,21 @@ public class ContactServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String query = request.getParameter("q");
+
+        try (Connection connection = dataSource.getConnection()) {
+            ContactService contactService = new ContactService(connection);
+            List<ContactDTO> contacts = contactService.findContact(query != null ? query : "");
+
+            Jsonb jsonb = JsonbBuilder.create();
+            String s = jsonb.toJson(contacts);
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.println(s);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
 
     }
 
@@ -88,6 +106,7 @@ public class ContactServlet extends HttpServlet {
                         is.read(picture);
                     } catch (Exception e) {
                         errMsg = "Failed to read the contact image";
+                        e.printStackTrace();
                     }
                 }
             }

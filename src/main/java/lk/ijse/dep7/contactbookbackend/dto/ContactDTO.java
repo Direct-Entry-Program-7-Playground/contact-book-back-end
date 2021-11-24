@@ -1,8 +1,11 @@
 package lk.ijse.dep7.contactbookbackend.dto;
 
-import java.io.Serializable;
-import java.util.Arrays;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 
+import java.io.Serializable;
+
+@JsonbPropertyOrder({"id", "fName", "lName", "phone", "email", "address"})
 public class ContactDTO implements Serializable {
     private String id;
     private String fName;
@@ -10,6 +13,7 @@ public class ContactDTO implements Serializable {
     private String phone;
     private String email;
     private String address;
+    @JsonbTransient
     private byte[] picture;
 
     public ContactDTO() {
