@@ -14,6 +14,7 @@ import lk.ijse.dep7.contactbookbackend.service.ContactService;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -28,7 +29,7 @@ public class ContactServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("doGet");
+
     }
 
     @Override
@@ -50,7 +51,6 @@ public class ContactServlet extends HttpServlet {
         Part cimage = null;
 
         byte[] picture = null;
-
         try {
             fname = request.getParameter("fname");
             lname = request.getParameter("lname");
@@ -71,7 +71,7 @@ public class ContactServlet extends HttpServlet {
             errMsg = "Phone and email both are empty, please add at least one contact detail";
         } else if (phone != null && !phone.trim().matches("^[\\d]{3,10}")) {
             errMsg = "Invalid phone number";
-        } else if (email != null && !email.trim().matches("^[A-Za-z\\d]{3,}@[A-Za-z\\d]{3,}(.[A-Za-z]{2,})+")) {
+        } else if (email != null && !email.trim().matches("^[A-Za-z\\d.]{3,}@[A-Za-z\\d]{3,}(.[A-Za-z]{2,})+")) {
             errMsg = "Invalid email address";
         } else if (address != null && !(address.trim().length() >= 3)) {
             errMsg = "Invalid address";
@@ -103,8 +103,11 @@ public class ContactServlet extends HttpServlet {
 
             ContactDTO contact = new ContactDTO(fname, lname, phone, email, address, picture);
 
-            System.out.println(contactService.saveContact(contact));
-            ;
+            String contactId = contactService.saveContact(contact);
+            System.out.println(contactId);
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.println(contactId);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
