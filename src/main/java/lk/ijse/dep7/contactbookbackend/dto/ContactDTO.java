@@ -98,7 +98,6 @@ public class ContactDTO implements Serializable {
 
     @JsonbProperty("picture")
     public String getPictureAsDataURl() {
-//        data:[<mediatype>][;base64],<data>
         if (picture != null) {
 
             String base64EncorderedPicture = Base64.getEncoder().encodeToString(picture);
