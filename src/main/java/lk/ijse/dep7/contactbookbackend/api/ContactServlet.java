@@ -37,12 +37,24 @@ public class ContactServlet extends HttpServlet {
 
         String errMsg = null;
 
-        String fname = request.getParameter("fname");
-        String lname = request.getParameter("lname");
-        String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
-        String address = request.getParameter("address");
-        Part cimage = request.getPart("cimage");
+
+        String fname = null;
+        String lname = null;
+        String phone = null;
+        String email = null;
+        String address = null;
+        Part cimage = null;
+        try {
+            fname = request.getParameter("fname");
+            lname = request.getParameter("lname");
+            phone = request.getParameter("phone");
+            email = request.getParameter("email");
+            address = request.getParameter("address");
+            cimage = request.getPart("cimage");
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
+            return;
+        }
 
         if (fname == null) {
             errMsg = "First name can't be empty";
@@ -59,7 +71,7 @@ public class ContactServlet extends HttpServlet {
         } else {
             pic:
             if (cimage != null) {
-                if (!cimage.getContentType().startsWith("image")) {
+                if (cimage.getContentType() == null || !cimage.getContentType().startsWith("image")) {
                     errMsg = "Invalid contact image";
                     break pic;
                 } else {
