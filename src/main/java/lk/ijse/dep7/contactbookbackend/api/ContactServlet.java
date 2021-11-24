@@ -8,10 +8,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import lk.ijse.dep7.contactbookbackend.dto.ContactDTO;
+import lk.ijse.dep7.contactbookbackend.service.ContactService;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @MultipartConfig(
         location = "/home/manoj/Documents/MRR/IJSE/DEP/Phase - 2/Day_89 (2021-10-11)/contact-book-back-end/src/main/uploaded/img/",
@@ -44,6 +48,9 @@ public class ContactServlet extends HttpServlet {
         String email = null;
         String address = null;
         Part cimage = null;
+
+        byte[] picture = null;
+
         try {
             fname = request.getParameter("fname");
             lname = request.getParameter("lname");
@@ -77,7 +84,7 @@ public class ContactServlet extends HttpServlet {
                 } else {
                     try {
                         InputStream is = cimage.getInputStream();
-                        byte[] picture = new byte[is.available()];
+                        picture = new byte[is.available()];
                         is.read(picture);
                     } catch (Exception e) {
                         errMsg = "Failed to read the contact image";
@@ -91,7 +98,7 @@ public class ContactServlet extends HttpServlet {
             return;
         }
 
-       /* try (Connection connection = dataSource.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             ContactService contactService = new ContactService(connection);
 
             ContactDTO contact = new ContactDTO(fname, lname, phone, email, address, picture);
@@ -100,7 +107,7 @@ public class ContactServlet extends HttpServlet {
             ;
         } catch (SQLException exception) {
             exception.printStackTrace();
-        }*/
+        }
 
 
     }

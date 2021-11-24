@@ -23,7 +23,7 @@ public class ContactService {
             stm.setString(3, contact.getPhone());
             stm.setString(4, contact.getEmail());
             stm.setString(5, contact.getAddress());
-            stm.setBlob(6, new SerialBlob(contact.getPicture()));
+            stm.setBlob(6, contact.getPicture() != null ? new SerialBlob(contact.getPicture()) : null);
 
             if (stm.executeUpdate() == 1) {
                 ResultSet keys = stm.getGeneratedKeys();
@@ -44,12 +44,12 @@ public class ContactService {
         try {
             PreparedStatement stm = connection.prepareStatement("SELECT * FROM contact WHERE id LIKE ? OR fname LIKE ? OR lname LIKE ? OR phone LIKE ? OR email LIKE ? OR address LIKE ?;");
 
-            stm.setString(1,query);
-            stm.setString(2,query);
-            stm.setString(3,query);
-            stm.setString(4,query);
-            stm.setString(5,query);
-            stm.setString(6,query);
+            stm.setString(1, query);
+            stm.setString(2, query);
+            stm.setString(3, query);
+            stm.setString(4, query);
+            stm.setString(5, query);
+            stm.setString(6, query);
 
             ResultSet rst = stm.executeQuery();
 
