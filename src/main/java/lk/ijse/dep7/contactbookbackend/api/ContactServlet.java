@@ -95,8 +95,8 @@ public class ContactServlet extends HttpServlet {
             errMsg = "Invalid address";
         } else {
             pic:
-            if (cimage != null) {
-                if (cimage.getContentType() == null || !cimage.getContentType().startsWith("image")) {
+            if (cimage.getContentType() != null) {
+                if (!cimage.getContentType().startsWith("image")) {
                     errMsg = "Invalid contact image";
                     break pic;
                 } else {
@@ -125,6 +125,7 @@ public class ContactServlet extends HttpServlet {
             String contactId = contactService.saveContact(contact);
             System.out.println(contactId);
             response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_CREATED);
             response.getWriter().println(JsonbBuilder.create().toJson(contactId));
 
         } catch (SQLException exception) {
