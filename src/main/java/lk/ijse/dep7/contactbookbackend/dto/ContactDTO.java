@@ -104,7 +104,7 @@ public class ContactDTO implements Serializable {
             StringBuilder sb = new StringBuilder();
             sb.append("data:");
             sb.append("image/*");
-            sb.append(";base64");
+            sb.append(";base64,");
             sb.append(base64EncorderedPicture);
             return sb.toString();
         }
